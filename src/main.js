@@ -18,7 +18,7 @@ async function run(action) {
 }
 function card(item) {
   const action = item.status === '待预订' || item.status === '已锁场' ? `<button class="track action" data-action="assign" data-id="${item.id}">确认锁场　→</button>` : item.status === '进行中' || item.status === '待结算' ? `<button class="track action" data-action="advance" data-id="${item.id}">${item.status === '进行中' ? '提交结算　→' : '完成归档　→'}</button>` : '<div class="closed">✓ 已完成闭环</div>'
-  return `<article class="shipment ${item.tone}"><div class="card-top"><span class="code">${item.id}</span><b>${item.status}</b></div><h4>${item.route}</h4><p>${item.cargo} · ${item.eta}</p><div class="route"><span>取货点</span><i></i><span>${item.status}</span><i></i><span>收货点</span></div>${action}</article>`
+  return `<article class="shipment ${item.tone}"><div class="card-top"><span class="code">${item.id}</span><b>${item.status}</b></div><h4>${item.route}</h4><p>${item.cargo} · ${item.eta}</p><div class="route"><span>入场点</span><i></i><span>${item.status}</span><i></i><span>撤场点</span></div>${action}</article>`
 }
 function render() {
   const pending = state.shipments.filter((item) => item.status !== '已完成' && item.status !== '已取消').length
