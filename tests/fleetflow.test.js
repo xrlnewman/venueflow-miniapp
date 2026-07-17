@@ -15,3 +15,15 @@ test('miniapp binds lifecycle actions to the shared API', async () => {
   assert.match(source, /fleetApi\.advance/)
   assert.match(source, /fleetApi\.resolveException/)
 })
+
+test('miniapp exposes session ticketing and settlement flow', async () => {
+  const api = await readFile(new URL('../src/api.js', import.meta.url), 'utf8')
+  const source = await readFile(new URL('../src/main.js', import.meta.url), 'utf8')
+  assert.match(api, /\/sessions/)
+  assert.match(api, /checkin/)
+  assert.match(api, /settle/)
+  assert.match(source, /场次与票务/)
+  assert.match(source, /购票/)
+  assert.match(source, /完成日结/)
+  assert.match(source, /venueApi\.sell/)
+})
