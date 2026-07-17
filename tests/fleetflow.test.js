@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 test('miniapp renders route cards and quick actions', async () => {
   const source = await readFile(new URL('../src/main.js', import.meta.url), 'utf8')
-  assert.match(source, /扫码接单/); assert.match(source, /今日活动订单/); assert.match(source, /FF-260716-018/)
+  assert.match(source, /确认锁场/); assert.match(source, /今日活动订单/); assert.match(source, /VN-260716-018/)
 })
 
 test('miniapp binds lifecycle actions to the shared API', async () => {
