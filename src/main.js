@@ -33,7 +33,7 @@ function card(item) {
 }
 function sessionCard(item) {
   const soldRate = item.capacity ? Math.round((item.sold / item.capacity) * 100) : 0
-  const action = item.status === '已排期' ? `<button class="session-action" data-action="sell-session" data-id="${item.id}">购票　→</button>` : item.status === '售票中' ? `<button class="session-action" data-action="sell-session" data-id="${item.id}">再买 1 张　→</button>` : item.status === '待结算' ? `<button class="session-action" data-action="settle-session" data-id="${item.id}">完成日结　→</button>` : '<span class="session-done">状态已同步</span>'
+  const action = item.status === '已排期' ? `<button class="session-action" data-action="sell-session" data-id="${item.id}">购票　→</button>` : item.status === '售票中' ? `<button class="session-action" data-action="sell-session" data-id="${item.id}">再买 1 张　→</button>` : item.status === '活动中' ? `<button class="session-action" data-action="pending-settlement" data-id="${item.id}">进入结算　→</button>` : item.status === '待结算' ? `<button class="session-action" data-action="settle-session" data-id="${item.id}">完成日结　→</button>` : '<span class="session-done">状态已同步</span>'
   return `<article class="session-card"><div class="session-meta"><span>${item.id}</span><b class="session-status ${item.tone || 'orange'}">${item.status}</b></div><h4>${item.title}</h4><p class="session-venue">⌖ ${item.venueName || item.venueId} · ${new Date(item.startsAt).toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p><div class="session-stats"><span><strong>${item.sold}</strong> 已售</span><span><strong>${item.checkedIn || 0}</strong> 已核销</span><span><strong>¥${item.price}</strong> 票价</span></div><div class="session-progress"><i style="width:${Math.min(soldRate, 100)}%"></i></div><div class="session-footer"><small>${item.sold}/${item.capacity} 个名额</small>${action}</div></article>`
 }
 function render() {
@@ -46,6 +46,7 @@ function render() {
     if (action === 'advance' && item) return run(() => fleetApi.advance(item.id, nextStatus(item.status)))
     if (action === 'resolve' && el.dataset.id) return run(() => fleetApi.resolveException(el.dataset.id))
     if (action === 'sell-session' && el.dataset.id) return buySession(el.dataset.id)
+    if (action === 'pending-settlement' && el.dataset.id) return run(() => venueApi.advance(el.dataset.id, '待结算'))
     if (action === 'settle-session' && el.dataset.id) return run(() => venueApi.settle(el.dataset.id))
     if (action === 'checkin-ticket') return checkinTicket()
     toast(({ scan: '请点击待预订活动订单完成锁场确认', route: '今日场地已更新', sign: '活动记录已加载', all: '活动订单池正在同步', exception: state.exceptions.length ? '请先处理场地事件' : '暂无待处理场地事件' })[action] || '操作已完成')

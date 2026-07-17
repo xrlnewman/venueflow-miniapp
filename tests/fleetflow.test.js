@@ -26,4 +26,6 @@ test('miniapp exposes session ticketing and settlement flow', async () => {
   assert.match(source, /购票/)
   assert.match(source, /完成日结/)
   assert.match(source, /venueApi\.sell/)
+  assert.match(source, /pending-settlement/)
+  assert.match(source, /进入结算/)
 })
